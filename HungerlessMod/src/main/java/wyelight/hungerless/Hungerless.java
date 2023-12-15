@@ -255,9 +255,9 @@ public class Hungerless {
                 }
             } else if (item == Items.CHICKEN) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
-                if (Math.random() > 0.8) {
-                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 40, 1));
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 40, 1));
+                if (Math.random() > 0.2) {
+                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 40, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 0));
                 }
             } else if (item == Items.MUTTON) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
