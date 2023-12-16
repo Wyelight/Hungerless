@@ -65,7 +65,8 @@ public class ModCakeBlock extends CakeBlock {
         } else {
             player.awardStat(Stats.EAT_CAKE_SLICE);
             player.getFoodData().eat(2, 0.1F);
-            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 3, false, false));
+            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 260, 2, false, false));
+            player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 260, 0));
             int i = blockState.getValue(BITES);
             levelAccessor.gameEvent(player, GameEvent.EAT, blockPos);
             if (i < 6) {

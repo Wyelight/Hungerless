@@ -1,11 +1,9 @@
 package wyelight.hungerless;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Spider;
@@ -14,10 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -35,11 +31,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import wyelight.hungerless.config.Config;
 import wyelight.hungerless.config.ConfigScreen;
 import wyelight.hungerless.init.ModInit;
+import wyelight.hungerless.world.item.ModFoodItem;
 
 import java.io.File;
 import java.util.Objects;
-
-import static wyelight.hungerless.config.Config.read;
 
 
 @Mod(Constants.MOD_ID)
@@ -56,7 +51,7 @@ public class Hungerless {
         public static boolean isClient = false;
         */
         Minecraft mc = Minecraft.getInstance();
-        Config config = new Config(mc.gameDirectory.getAbsolutePath() + File.separator + "config" + File.separator + "ValiantConfig.cfg");
+        Config config = new Config(mc.gameDirectory.getAbsolutePath() + File.separator + "config" + File.separator + "HungerlessConfig.cfg");
         config.read();
         MinecraftForge.EVENT_BUS.register(new EventListener());
         System.out.println("GotWood Mod Init");
@@ -76,7 +71,17 @@ public class Hungerless {
                     }
                 }
                 else {
-                    player.getFoodData().setFoodLevel(9);
+                    boolean check_hunger = player.getActiveEffectsMap().containsKey(MobEffects.HUNGER);
+                    /*
+                    MobEffectInstance check_hunger = player.getEffect(MobEffects.HUNGER);
+                    assert check_hunger != null;*/
+                    if (check_hunger) {
+                        player.getFoodData().setFoodLevel(3);
+                    }
+                    else {
+                        player.getFoodData().setFoodLevel(9);
+                    }
+                    //player.getFoodData().setFoodLevel(9);
                 }
                 /*
                 if (Config.autoSwim) {
@@ -272,11 +277,17 @@ public class Hungerless {
     }
     public void commonInit()
     {
+
+        //public net.minecraft.world.item.Item d ;
+        //ForgeRegistries.ITEMS.getValue(new ResourceLocation("sweet_berries")).
+
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
             if (item.isEdible() && !(item == Items.MUSHROOM_STEW || item == Items.RABBIT_STEW || item == Items.SUSPICIOUS_STEW || item == Items.BEETROOT_SOUP || item == Items.COOKIE || item == Items.DRIED_KELP || item == Items.PUMPKIN_PIE)) {
-                ObfuscationReflectionHelper.setPrivateValue(Item.class, item, 4, "maxStackSize");
+                ObfuscationReflectionHelper.setPrivateValue(Item.class, item, 4,"maxStackSize");
             }
         }
         System.out.println("Common Event");
+
+
     }
 }

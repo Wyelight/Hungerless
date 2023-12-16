@@ -1,5 +1,7 @@
 package wyelight.hungerless.init;
 
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
@@ -21,6 +23,8 @@ public class ModInit {
     public static final DeferredRegister<Block> VANILLA_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, "minecraft");
 
     public static final RegistryObject<Block> NEW_CAKE = VANILLA_BLOCKS.register("cake",() -> new ModCakeBlock(BlockBehaviour.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL)));
+
+    //public static final RegistryObject<Item> NEW_CAKE_ITEM = VANILLA_ITEMS.register("cake", () -> ForgeRegistries.ITEMS.getValue(new ResourceLocation("cake")));
 
     public static final RegistryObject<Item> NEW_APPLE = VANILLA_ITEMS.register("apple", () -> new ModFoodItem(new Item.Properties().food(Foods.APPLE).stacksTo(4),16));
     public static final RegistryObject<Item> NEW_GLOW_BERRIES = VANILLA_ITEMS.register("glow_berries", () -> new ModFoodItem(new Item.Properties().food(Foods.GLOW_BERRIES).stacksTo(4),8));
