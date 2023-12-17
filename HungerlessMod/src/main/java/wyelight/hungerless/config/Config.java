@@ -9,7 +9,8 @@ public class Config {
     protected static final Properties defaultConfig = new Properties();
     public static String fileName;
     public static boolean movementRework = true;
-    public static boolean autoSwim = true;
+    public static boolean mobMovementRework = true;
+    public static boolean bonusEffects = true;
 
     public Config(String fileName){
         Config.fileName = fileName;
@@ -28,7 +29,8 @@ public class Config {
         }
 
         movementRework = parseIntConfig(properties.getProperty(Constants.MOVEMENT_REWORK), 1) != 0;
-        autoSwim = parseIntConfig(properties.getProperty(Constants.AUTO_SWIM), 1) != 0;
+        mobMovementRework = parseIntConfig(properties.getProperty(Constants.MOB_MOVEMENT_REWORK), 1) != 0;
+        bonusEffects = parseIntConfig(properties.getProperty(Constants.BONUS_EFFECTS), 1) != 0;
     }
 
     private static int parseIntConfig(String s, int defaultValue) {
@@ -43,13 +45,15 @@ public class Config {
             File config = new File(fileName);
             //boolean existed = config.exists();
             File parentDir = config.getParentFile();
-            if (!parentDir.exists())
+            if (!parentDir.exists()) {
                 parentDir.mkdirs();
+            }
 
             FileWriter configWriter = new FileWriter(config);
 
             writeBoolean(configWriter, Constants.MOVEMENT_REWORK, movementRework);
-            writeBoolean(configWriter, Constants.AUTO_SWIM, autoSwim);
+            writeBoolean(configWriter, Constants.MOB_MOVEMENT_REWORK, movementRework);
+            writeBoolean(configWriter, Constants.BONUS_EFFECTS, bonusEffects);
             configWriter.close();
 
         } catch (IOException e) {
@@ -67,6 +71,7 @@ public class Config {
 
     static {
         defaultConfig.setProperty(Constants.MOVEMENT_REWORK, "1");
-        defaultConfig.setProperty(Constants.AUTO_SWIM, "1");
+        defaultConfig.setProperty(Constants.MOB_MOVEMENT_REWORK, "1");
+        defaultConfig.setProperty(Constants.BONUS_EFFECTS, "1");
     }
 }
