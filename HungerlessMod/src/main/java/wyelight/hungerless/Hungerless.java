@@ -1,10 +1,10 @@
 package wyelight.hungerless;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Spider;
@@ -19,8 +19,7 @@ import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,7 +34,10 @@ import wyelight.hungerless.config.ConfigScreen;
 import wyelight.hungerless.init.ModInit;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Objects;
+
+import static java.lang.Math.min;
 
 
 @Mod(Constants.MOD_ID)
@@ -44,6 +46,7 @@ public class Hungerless {
         //ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> "ANY", (remote, isServer) -> true));
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         //BLOCKS.register(bus);
+        ModInit.MOB_EFFECTS.register(bus);
         ModInit.ITEMS.register(bus);
         ModInit.VANILLA_ITEMS.register(bus);
         ModInit.VANILLA_BLOCKS.register(bus);
@@ -126,16 +129,64 @@ public class Hungerless {
             }
         }
 
+        @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+        public void onDamageEvent(LivingHurtEvent event) {
+
+            String dmgType = event.getSource().getMsgId();
+            Float dmgAmount = event.getAmount();
+            LivingEntity entity = event.getEntity();
+
+            boolean check_fall_resist = entity.getActiveEffectsMap().containsKey(ModInit.FALL_RESISTANCE.get());
+            boolean check_sturdy = entity.getActiveEffectsMap().containsKey(ModInit.STURDY.get());
+            boolean check_magic_resist = entity.getActiveEffectsMap().containsKey(ModInit.MAGIC_RESISTANCE.get());
+
+            if (check_fall_resist && Objects.equals(dmgType, "fall")){
+                MobEffectInstance effectInstance = entity.getActiveEffectsMap().get(ModInit.FALL_RESISTANCE.get());
+                event.setAmount(dmgAmount/(2+effectInstance.getAmplifier()));   // reduces fall damage
+            }
+
+            if (check_sturdy){
+                if (entity.getHealth() == entity.getMaxHealth() && dmgAmount >= entity.getMaxHealth()) {
+                    event.setAmount(entity.getMaxHealth() - 1); // Makes it impossible to "one shot" this entity
+                }
+                if (entity.getHealth() <= 6){
+                    event.setAmount(dmgAmount/2.0F); // Reduce damage taken when low health
+                }
+            }
+
+            if (check_magic_resist){
+                if (dmgType.equals("wither")) {
+                    event.setAmount(0.0F);
+                    //entity.sendSystemMessage(Component.literal("Resisted Wither"));
+                }
+                if (dmgType.equals("magic") || dmgType.equals("indirectMagic") || dmgType.equals("lightningBolt") || dmgType.equals("sonicBoom") || dmgType.equals("dragonBreath")){
+                    MobEffectInstance effectInstance = entity.getActiveEffectsMap().get(ModInit.MAGIC_RESISTANCE.get());
+                    event.setAmount(dmgAmount/(2.0F+effectInstance.getAmplifier()));
+                    //event.setAmount(0.0F);
+                    //entity.sendSystemMessage(Component.literal("Resisted Magic"));
+                }
+            }
+
+            if (event.getEntity() instanceof Player player) {
+                //player.sendSystemMessage(Component.literal(dmgType+" damage!"));
+            }
+        }
+
         public static void FoodHealing(Player player, Item item) {
             Config.read();
             if (item == Items.ROTTEN_FLESH) {
                 if (Math.random() > 0.6) {
                     player.addEffect(new MobEffectInstance(MobEffects.POISON, 40, 2));
                 }
+            } else if (item == Items.POTATO) {
+                player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
+                if (Config.bonusEffects) {
+                    player.addEffect(new MobEffectInstance(ModInit.STURDY.get(), 200, 0));
+                }
             } else if (item == Items.BAKED_POTATO) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, 0));
+                    player.addEffect(new MobEffectInstance(ModInit.STURDY.get(), 600, 0));
                 }
             } else if (item == Items.BEETROOT) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
@@ -146,7 +197,7 @@ public class Hungerless {
                 player.getAbilities().setWalkingSpeed(0.315F);
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 120, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 220, 0));
                 }
             } else if (item == Items.GOLDEN_CARROT) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 440, 1, false, false));
@@ -206,7 +257,7 @@ public class Hungerless {
             } else if (item == Items.COOKED_CHICKEN) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 80, 0));
+                    player.addEffect(new MobEffectInstance(ModInit.FALL_RESISTANCE.get(), 400, 0));
                 }
             } else if (item == Items.COOKED_MUTTON) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
@@ -218,7 +269,7 @@ public class Hungerless {
             } else if (item == Items.COOKED_BEEF) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 2));
+                    player.addEffect(new MobEffectInstance(ModInit.MAGIC_RESISTANCE.get(), 400, 0));
                 }
             } else if (item == Items.BEEF) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));

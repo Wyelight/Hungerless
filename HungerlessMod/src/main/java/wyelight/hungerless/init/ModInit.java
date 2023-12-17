@@ -1,7 +1,7 @@
 package wyelight.hungerless.init;
 
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
@@ -13,11 +13,13 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import wyelight.hungerless.effect.ModMobEffect;
 import wyelight.hungerless.world.item.ModBowlFoodItem;
 import wyelight.hungerless.world.item.ModFoodItem;
 import wyelight.hungerless.world.level.block.ModCakeBlock;
 
 public class ModInit {
+    public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, "hungerless");
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "hungerless");
     public static final DeferredRegister<Item> VANILLA_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "minecraft");
     public static final DeferredRegister<Block> VANILLA_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, "minecraft");
@@ -39,5 +41,9 @@ public class ModInit {
 
     public static final RegistryObject<Item> SWEET_BERRY_SEEDS = ITEMS.register("sweet_berry_seeds", () ->  new ItemNameBlockItem(Blocks.SWEET_BERRY_BUSH, (new Item.Properties())));
     public static final RegistryObject<Item> GLOW_BERRY_SEEDS = ITEMS.register("glow_berry_seeds", () -> new ItemNameBlockItem(Blocks.CAVE_VINES, (new Item.Properties())));
+
+    public static final RegistryObject<MobEffect> FALL_RESISTANCE = MOB_EFFECTS.register("fall_resistance", () -> new ModMobEffect(MobEffectCategory.BENEFICIAL,16773073));
+    public static final RegistryObject<MobEffect> STURDY = MOB_EFFECTS.register("sturdy", () -> new ModMobEffect(MobEffectCategory.BENEFICIAL,9520880));
+    public static final RegistryObject<MobEffect> MAGIC_RESISTANCE = MOB_EFFECTS.register("magic_resistance", () -> new ModMobEffect(MobEffectCategory.BENEFICIAL,11141290));
 }
 
