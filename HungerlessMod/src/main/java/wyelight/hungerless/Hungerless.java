@@ -28,6 +28,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
 import wyelight.hungerless.config.Config;
 import wyelight.hungerless.config.ConfigScreen;
 import wyelight.hungerless.init.ModInit;
@@ -52,7 +53,7 @@ public class Hungerless {
         */
         Minecraft mc = Minecraft.getInstance();
         Config config = new Config(mc.gameDirectory.getAbsolutePath() + File.separator + "config" + File.separator + "HungerlessConfig.cfg");
-        config.read();
+        Config.read();
         MinecraftForge.EVENT_BUS.register(new EventListener());
         System.out.println("GotWood Mod Init");
         commonInit();
@@ -279,15 +280,20 @@ public class Hungerless {
     {
 
         //public net.minecraft.world.item.Item d ;
-        //ForgeRegistries.ITEMS.getValue(new ResourceLocation("sweet_berries")).
+        //int Ahf = ForgeRegistries.ITEMS.getValue(new ResourceLocation("sweet_berries")).MAX_STACK_SIZE;
+        //ForgeRegistries.ITEMS.getValue(new ResourceLocation("sweet_berries")).USE
 
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
-            if (item.isEdible() && !(item == Items.MUSHROOM_STEW || item == Items.RABBIT_STEW || item == Items.SUSPICIOUS_STEW || item == Items.BEETROOT_SOUP || item == Items.COOKIE || item == Items.DRIED_KELP || item == Items.PUMPKIN_PIE)) {
-                ObfuscationReflectionHelper.setPrivateValue(Item.class, item, 4,"maxStackSize");
+            if (item.isEdible() && new ItemStack(item).getMaxStackSize() == 64) {
+                try {
+                    ObfuscationReflectionHelper.setPrivateValue(Item.class, item, 4, "f_41370_");
+                }
+                catch (Exception err) {
+                    LogManager.getLogger().error("Failed to change stack size.");
+                }
             }
         }
         System.out.println("Common Event");
-
 
     }
 }

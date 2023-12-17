@@ -26,7 +26,7 @@ public class ModInit {
 
     //public static final RegistryObject<Item> NEW_CAKE_ITEM = VANILLA_ITEMS.register("cake", () -> ForgeRegistries.ITEMS.getValue(new ResourceLocation("cake")));
 
-    public static final RegistryObject<Item> NEW_APPLE = VANILLA_ITEMS.register("apple", () -> new ModFoodItem(new Item.Properties().food(Foods.APPLE).stacksTo(4),16));
+    public static final RegistryObject<Item> NEW_APPLE = VANILLA_ITEMS.register("apple", () -> new ModFoodItem(new Item.Properties().food(Foods.APPLE).stacksTo(4),32));
     public static final RegistryObject<Item> NEW_GLOW_BERRIES = VANILLA_ITEMS.register("glow_berries", () -> new ModFoodItem(new Item.Properties().food(Foods.GLOW_BERRIES).stacksTo(4),8));
     public static final RegistryObject<Item> NEW_SWEET_BERRIES = VANILLA_ITEMS.register("sweet_berries", () -> new ModFoodItem(new Item.Properties().food(Foods.SWEET_BERRIES).stacksTo(4),8));
     public static final RegistryObject<Item> NEW_COOKIE = VANILLA_ITEMS.register("cookie", () -> new ModFoodItem(new Item.Properties().food(Foods.COOKIE).stacksTo(8),16));
