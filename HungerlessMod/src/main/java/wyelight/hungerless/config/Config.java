@@ -11,6 +11,7 @@ public class Config {
     public static boolean movementRework = true;
     public static boolean mobMovementRework = true;
     public static boolean bonusEffects = true;
+    public static boolean bonusEffectsParticles = false;
 
     public Config(String fileName){
         Config.fileName = fileName;
@@ -31,6 +32,7 @@ public class Config {
         movementRework = parseIntConfig(properties.getProperty(Constants.MOVEMENT_REWORK), 1) != 0;
         mobMovementRework = parseIntConfig(properties.getProperty(Constants.MOB_MOVEMENT_REWORK), 1) != 0;
         bonusEffects = parseIntConfig(properties.getProperty(Constants.BONUS_EFFECTS), 1) != 0;
+        bonusEffectsParticles = parseIntConfig(properties.getProperty(Constants.BONUS_EFFECTS_PARTICLES), 1) != 0;
     }
 
     private static int parseIntConfig(String s, int defaultValue) {
@@ -54,6 +56,7 @@ public class Config {
             writeBoolean(configWriter, Constants.MOVEMENT_REWORK, movementRework);
             writeBoolean(configWriter, Constants.MOB_MOVEMENT_REWORK, movementRework);
             writeBoolean(configWriter, Constants.BONUS_EFFECTS, bonusEffects);
+            writeBoolean(configWriter, Constants.BONUS_EFFECTS_PARTICLES, bonusEffectsParticles);
             configWriter.close();
 
         } catch (IOException e) {
@@ -73,5 +76,6 @@ public class Config {
         defaultConfig.setProperty(Constants.MOVEMENT_REWORK, "1");
         defaultConfig.setProperty(Constants.MOB_MOVEMENT_REWORK, "1");
         defaultConfig.setProperty(Constants.BONUS_EFFECTS, "1");
+        defaultConfig.setProperty(Constants.BONUS_EFFECTS_PARTICLES, "0");
     }
 }

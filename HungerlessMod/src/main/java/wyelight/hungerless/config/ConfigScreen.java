@@ -14,6 +14,7 @@ public class ConfigScreen extends Screen {
     protected Checkbox movementReworkWidget;
     protected Checkbox mobMovementReworkWidget;
     protected Checkbox bonusEffectsWidget;
+    protected Checkbox bonusEffectsParticlesWidget;
 
     public ConfigScreen(Screen parent) {
         super(Component.literal("Hungerless Options"));
@@ -30,6 +31,7 @@ public class ConfigScreen extends Screen {
         Config.movementRework = movementReworkWidget.selected();
         Config.mobMovementRework = mobMovementReworkWidget.selected();
         Config.bonusEffects = bonusEffectsWidget.selected();
+        Config.bonusEffectsParticles = bonusEffectsParticlesWidget.selected();
         Config.save();
         assert minecraft != null;
         minecraft.setScreen(parent);
@@ -66,9 +68,18 @@ public class ConfigScreen extends Screen {
             }
         };
 
+        bonusEffectsParticlesWidget = new Checkbox(width / 2 - 100, 27*4, 200, 20, Component.literal("Bonus Effect Particles"), Config.bonusEffectsParticles) {
+            //@Override
+
+            public void renderButton(PoseStack matrices, int mouseX, int mouseY, float delta) {
+                super.renderWidget(matrices, mouseX, mouseY, delta);
+            }
+        };
+
         addRenderableWidget(movementReworkWidget);
         addRenderableWidget(mobMovementReworkWidget);
         addRenderableWidget(bonusEffectsWidget);
+        addRenderableWidget(bonusEffectsParticlesWidget);
 
         addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (buttonWidget) -> {
             onClose();

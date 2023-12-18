@@ -174,6 +174,7 @@ public class Hungerless {
 
         public static void FoodHealing(Player player, Item item) {
             Config.read();
+            boolean show_particles = Config.bonusEffectsParticles;
             if (item == Items.ROTTEN_FLESH) {
                 if (Math.random() > 0.6) {
                     player.addEffect(new MobEffectInstance(MobEffects.POISON, 40, 2));
@@ -181,100 +182,100 @@ public class Hungerless {
             } else if (item == Items.POTATO) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(ModInit.STURDY.get(), 200, 0));
+                    player.addEffect(new MobEffectInstance(ModInit.STURDY.get(), 200, 0, false, show_particles, true));
                 }
             } else if (item == Items.BAKED_POTATO) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(ModInit.STURDY.get(), 600, 0));
+                    player.addEffect(new MobEffectInstance(ModInit.STURDY.get(), 800, 0, false, show_particles, true));
                 }
             } else if (item == Items.BEETROOT) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 80, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 80, 0, false, show_particles, true));
                 }
             } else if (item == Items.CARROT) {
                 player.getAbilities().setWalkingSpeed(0.315F);
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 220, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 220, 0, false, show_particles, true));
                 }
             } else if (item == Items.GOLDEN_CARROT) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 440, 1, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 440, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 440, 0, false, show_particles, true));
                 }
             } else if (item == Items.MUSHROOM_STEW) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 25, 4, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 800, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 800, 0, false, show_particles, true));
                 }
             } else if (item == Items.RABBIT_STEW) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 25, 4, false, false));
                 if (Config.bonusEffects) {
                     player.addEffect(new MobEffectInstance(MobEffects.JUMP, 600, 1));
-                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 600, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 600, 0, false, show_particles, true));
                 }
             } else if (item == Items.BEETROOT_SOUP) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 25, 4, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 400, 0, false, show_particles, true));
                 }
             } else if (item == Items.PUMPKIN_PIE) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 4, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 600, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 600, 0, false, show_particles, true));
+                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 0, false, show_particles, true));
                 }
             } else if (item == Items.GLOW_BERRIES) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 200, 1));
+                    player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 200, 1, false, show_particles, true));
                 }
                 player.addEffect(new MobEffectInstance(MobEffects.GLOWING, 800, 0));
             } else if (item == Items.HONEY_BOTTLE) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 200, 1));
-                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1));
+                    player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 200, 1, false, show_particles, true));
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1, false, show_particles, true));
                 }
             } else if (item == Items.COOKED_RABBIT) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.JUMP, 400, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 200, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.JUMP, 400, 0, false, show_particles, true));
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 200, 0, false, show_particles, true));
                 }
             } else if (item == Items.COOKED_COD) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 200, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 200, 0, false, show_particles, true));
                 }
             } else if (item == Items.COOKED_SALMON) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 200, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 200, 0, false, show_particles, true));
                 }
             } else if (item == Items.COOKED_CHICKEN) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(ModInit.FALL_RESISTANCE.get(), 400, 0));
+                    player.addEffect(new MobEffectInstance(ModInit.FALL_RESISTANCE.get(), 600, 0, false, show_particles, true));
                 }
             } else if (item == Items.COOKED_MUTTON) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 80, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 200, 0, false, show_particles, true));
                 }
             } else if (item == Items.COOKED_PORKCHOP) {
                 player.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 1));
             } else if (item == Items.COOKED_BEEF) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Config.bonusEffects) {
-                    player.addEffect(new MobEffectInstance(ModInit.MAGIC_RESISTANCE.get(), 400, 0));
+                    player.addEffect(new MobEffectInstance(ModInit.MAGIC_RESISTANCE.get(), 600, 0, false, show_particles, true));
                 }
             } else if (item == Items.BEEF) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Math.random() > 0.5) {
-                    player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 240, 1));
+                    player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 240, 0));
                 }
             } else if (item == Items.PORKCHOP) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
@@ -284,8 +285,7 @@ public class Hungerless {
             } else if (item == Items.CHICKEN) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
                 if (Math.random() > 0.2) {
-                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 40, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 240, 1));
                 }
             } else if (item == Items.MUTTON) {
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, Objects.requireNonNull(item.getFoodProperties()).getNutrition() * 12, 2, false, false));
