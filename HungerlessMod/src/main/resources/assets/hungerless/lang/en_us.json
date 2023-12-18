@@ -1,4 +1,7 @@
 {
 	"item.hungerless.sweet_berry_seeds": "Sweet Berry Seeds",
-	"item.hungerless.glow_berry_seeds": "Glow Berry Seeds"
+	"item.hungerless.glow_berry_seeds": "Glow Berry Seeds",
+	"effect.hungerless.fall_resistance": "Fall Resistance",
+	"effect.hungerless.magic_resistance": "Magic Resistance",
+	"effect.hungerless.sturdy": "Sturdy"
 }
