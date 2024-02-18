@@ -15,6 +15,7 @@ public class ConfigScreen extends Screen {
     protected Checkbox mobMovementReworkWidget;
     protected Checkbox bonusEffectsWidget;
     protected Checkbox bonusEffectsParticlesWidget;
+    protected Checkbox instantHealingWidget;
 
     public ConfigScreen(Screen parent) {
         super(Component.literal("Hungerless Options"));
@@ -32,6 +33,7 @@ public class ConfigScreen extends Screen {
         Config.mobMovementRework = mobMovementReworkWidget.selected();
         Config.bonusEffects = bonusEffectsWidget.selected();
         Config.bonusEffectsParticles = bonusEffectsParticlesWidget.selected();
+        Config.instantHealing = instantHealingWidget.selected();
         Config.save();
         assert minecraft != null;
         minecraft.setScreen(parent);
@@ -40,7 +42,7 @@ public class ConfigScreen extends Screen {
     @Override
     protected void init() {
         Config.read();
-        movementReworkWidget = new Checkbox(width / 2 - 100, 27*1, 200, 20, Component.literal("Sprint Replaced By Speed Walk"), Config.movementRework) {
+        movementReworkWidget = new Checkbox(width / 2 - 100, 27*3, 200, 20, Component.literal("Sprint Replaced By Speed Walk"), Config.movementRework) {
 
             public void renderButton(PoseStack matrices, int mouseX, int mouseY, float delta) {
                 super.renderWidget(matrices, mouseX, mouseY, delta);
@@ -50,7 +52,7 @@ public class ConfigScreen extends Screen {
                 }*/
             }
         };
-        mobMovementReworkWidget = new Checkbox(width / 2 - 100, 27*2, 200, 20, Component.literal("Melee Mob Speed Adjustments"), Config.movementRework) {
+        mobMovementReworkWidget = new Checkbox(width / 2 - 100, 27*4, 200, 20, Component.literal("Melee Mob Speed Adjustments"), Config.movementRework) {
 
             public void renderButton(PoseStack matrices, int mouseX, int mouseY, float delta) {
                 super.renderWidget(matrices, mouseX, mouseY, delta);
@@ -60,7 +62,7 @@ public class ConfigScreen extends Screen {
                 }*/
             }
         };
-        bonusEffectsWidget = new Checkbox(width / 2 - 100, 27*3, 200, 20, Component.literal("Food Bonus Effects"), Config.bonusEffects) {
+        bonusEffectsWidget = new Checkbox(width / 2 - 100, 27*1, 200, 20, Component.literal("Food Bonus Effects"), Config.bonusEffects) {
             //@Override
 
             public void renderButton(PoseStack matrices, int mouseX, int mouseY, float delta) {
@@ -68,7 +70,15 @@ public class ConfigScreen extends Screen {
             }
         };
 
-        bonusEffectsParticlesWidget = new Checkbox(width / 2 - 100, 27*4, 200, 20, Component.literal("Bonus Effect Particles"), Config.bonusEffectsParticles) {
+        bonusEffectsParticlesWidget = new Checkbox(width / 2 - 100, 27*2, 200, 20, Component.literal("Bonus Effect Particles"), Config.bonusEffectsParticles) {
+            //@Override
+
+            public void renderButton(PoseStack matrices, int mouseX, int mouseY, float delta) {
+                super.renderWidget(matrices, mouseX, mouseY, delta);
+            }
+        };
+
+        instantHealingWidget = new Checkbox(width / 2 - 100, 27*5, 200, 20, Component.literal("Instant Healing"), Config.instantHealing) {
             //@Override
 
             public void renderButton(PoseStack matrices, int mouseX, int mouseY, float delta) {
@@ -80,6 +90,7 @@ public class ConfigScreen extends Screen {
         addRenderableWidget(mobMovementReworkWidget);
         addRenderableWidget(bonusEffectsWidget);
         addRenderableWidget(bonusEffectsParticlesWidget);
+        addRenderableWidget(instantHealingWidget);
 
         addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (buttonWidget) -> {
             onClose();

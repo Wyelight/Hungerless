@@ -2,6 +2,9 @@ package wyelight.hungerless.init;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
@@ -38,6 +41,9 @@ public class ModInit {
     public static final RegistryObject<Item> NEW_RABBIT_STEW = VANILLA_ITEMS.register("rabbit_stew", () -> new ModBowlFoodItem(new Item.Properties().food(Foods.RABBIT_STEW).stacksTo(1),2));
     public static final RegistryObject<Item> NEW_MUSHROOM_STEW = VANILLA_ITEMS.register("mushroom_stew", () -> new ModBowlFoodItem(new Item.Properties().food(Foods.MUSHROOM_STEW).stacksTo(1),2));
     public static final RegistryObject<Item> NEW_BEETROOT_SOUP = VANILLA_ITEMS.register("beetroot_soup", () -> new ModBowlFoodItem(new Item.Properties().food(Foods.BEETROOT_SOUP).stacksTo(1),2));
+
+    public static final FoodProperties ROTTEN_FLESH_PROPS = (new FoodProperties.Builder()).nutrition(4).saturationMod(0.1F).meat().build();
+    public static final RegistryObject<Item> NEW_ROTTEN_FLESH = VANILLA_ITEMS.register("rotten_flesh", () -> new ModBowlFoodItem(new Item.Properties().food(ROTTEN_FLESH_PROPS).stacksTo(4),2));
 
     public static final RegistryObject<Item> SWEET_BERRY_SEEDS = ITEMS.register("sweet_berry_seeds", () ->  new ItemNameBlockItem(Blocks.SWEET_BERRY_BUSH, (new Item.Properties())));
     public static final RegistryObject<Item> GLOW_BERRY_SEEDS = ITEMS.register("glow_berry_seeds", () -> new ItemNameBlockItem(Blocks.CAVE_VINES, (new Item.Properties())));
