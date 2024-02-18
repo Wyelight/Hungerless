@@ -156,32 +156,29 @@ public class Hungerless {
             }
             // New Study effect logic
             if (check_sturdy){
-                if (entity.getHealth() == entity.getMaxHealth() && dmgAmount >= entity.getMaxHealth()) {
-                    event.setAmount(entity.getMaxHealth() - 2); // Makes it impossible to "one shot" this entity
+                if (dmgAmount > entity.getMaxHealth()/2 && !Objects.equals(dmgType, "fall")) {
+                    //entity.sendSystemMessage(Component.literal("Resisted "+dmgAmount));
+                    MobEffectInstance effectInstance = entity.getActiveEffectsMap().get(ModInit.STURDY.get());
+                    event.setAmount(min(dmgAmount/(2.0F+effectInstance.getAmplifier()),entity.getMaxHealth()-2));
+                    entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 40+(effectInstance.getAmplifier()*10)));
                 }
-                /*
-                if (entity.getHealth() <= 6){
-                    event.setAmount(dmgAmount/2.0F); // Reduce damage taken when low health
-                }*/
             }
             // New Magic Resist effect logic
             if (check_magic_resist){
                 if (dmgType.equals("wither")) {
-                    // Disables all wither damage
-                    event.setAmount(0.0F);
-
+                    // Removes wither effect upon receiving wither damage
+                    event.getEntity().removeEffect(MobEffects.WITHER);
                     //entity.sendSystemMessage(Component.literal("Resisted Wither"));
                 }
                 if (dmgType.equals("magic") || dmgType.equals("indirectMagic") || dmgType.equals("lightningBolt") || dmgType.equals("sonicBoom") || dmgType.equals("dragonBreath")){
                     MobEffectInstance effectInstance = entity.getActiveEffectsMap().get(ModInit.MAGIC_RESISTANCE.get());
                     // Resists magic damage based on multiplier
                     event.setAmount(dmgAmount/(2.0F+effectInstance.getAmplifier()));
-                    //event.setAmount(0.0F);
                     //entity.sendSystemMessage(Component.literal("Resisted Magic"));
                 }
             }
-
             //if (event.getEntity() instanceof Player player) {
+                //identifies damage type
                 //player.sendSystemMessage(Component.literal(dmgType+" damage!"));
             //}
         }
