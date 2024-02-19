@@ -132,7 +132,7 @@ public class Hungerless {
 
                 if (Config.mobMovementRework && !hasMod) {
                     Objects.requireNonNull(attributeInst).addTransientModifier(attributeModSpeedBoost);
-                    livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40));
+                    //livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40));
                     //System.out.println(livingEntity.getName()+" Sped up");
 
                 }
@@ -155,7 +155,7 @@ public class Hungerless {
 
                 if (Config.movementRework && !hasMod) {
                     Objects.requireNonNull(attributeInst).addTransientModifier(attributeModSpeedBoost);
-                    livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40));
+                    //livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40));
                     //System.out.println(livingEntity.getName()+" Sped up");
 
                 }
