@@ -1,15 +1,15 @@
 package wyelight.hungerless;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.Spider;
-import net.minecraft.world.entity.monster.WitherSkeleton;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -34,16 +34,15 @@ import wyelight.hungerless.config.ConfigScreen;
 import wyelight.hungerless.init.ModInit;
 
 import java.io.File;
-import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 
-import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 
 @Mod(Constants.MOD_ID)
 public class Hungerless {
-    public Hungerless() throws IllegalAccessException {
+    public Hungerless() {
         //ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> "ANY", (remote, isServer) -> true));
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         //BLOCKS.register(bus);
@@ -55,13 +54,13 @@ public class Hungerless {
         new Config(mc.gameDirectory.getAbsolutePath() + File.separator + "config" + File.separator + "HungerlessConfig.cfg");
         Config.read();
         MinecraftForge.EVENT_BUS.register(new EventListener());
-        System.out.println("GotWood Mod Init");
+        System.out.println("Hungerless Mod Init");
         commonInit();
         ModLoadingContext.get().registerExtensionPoint(ConfigScreenFactory.class, () -> new ConfigScreenFactory((minecraft, screen) -> new ConfigScreen(screen)));
     }
 
-    public static final Float MODIFIED_PLAYER_SPEED = 0.115F; // What the player's walk speed is set to if sprinting is disabled
-
+    public static final Float playerSpeedModifier = 0.015F; // What to add to the player's walk speed if sprinting is disabled
+    public static final Float mobSpeedModifier = 0.022F; // What to add to melee mob's walk speed
     //public static final Float MODIFIED_PLAYER_SPEED = 0.115F; // What the player's walk speed is set to if sprinting is disabled
 
     //@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -91,34 +90,78 @@ public class Hungerless {
                     }
                 }
             }
+            //UpdateSpeed(event.getEntity());
         }
 
         @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
         public void onJoin(EntityJoinLevelEvent event) {
-            if (event.getEntity() instanceof Player player) {
-                // Increases movement speed of player if sprinting is disabled
-                if (Config.movementRework) {
-                    Objects.requireNonNull(player.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(MODIFIED_PLAYER_SPEED);
-                }
-            }
-            // Increases movement speed of common hostile mobs
-            if (Config.mobMovementRework) {
-                if (event.getEntity() instanceof Spider spider) {
-                    Objects.requireNonNull(spider.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.35F);
-                }
-                if (event.getEntity() instanceof Zombie zombie) {
-                    if (!zombie.isBaby()) {
-                        Objects.requireNonNull(zombie.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.25F);
-                    }
-                }
-                if (event.getEntity() instanceof Creeper creeper) {
-                    Objects.requireNonNull(creeper.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.30F);
-                }
-                if (event.getEntity() instanceof WitherSkeleton witherSkeleton) {
-                    Objects.requireNonNull(witherSkeleton.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.35F);
-                }
+            if (event.getEntity() instanceof LivingEntity livingEntity){
+                UpdateSpeed(livingEntity);
             }
         }
+        @SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = true)
+        public void onMobSpawn(MobSpawnEvent.FinalizeSpawn event) {
+            UpdateSpeed(event.getEntity());
+        }
+
+        @SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = true)
+        public void onLivingJump(LivingEvent.LivingJumpEvent event) {
+            UpdateSpeed(event.getEntity());
+        }
+        @SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = true)
+        public void onLivingFall(LivingFallEvent event) {
+            UpdateSpeed(event.getEntity());
+        }
+
+        public static void UpdateSpeed(LivingEntity livingEntity) {
+            if (livingEntity instanceof Zombie || livingEntity instanceof WitherSkeleton || livingEntity instanceof Creeper || livingEntity instanceof Spider || livingEntity instanceof Wolf || livingEntity instanceof PiglinBrute || livingEntity instanceof AbstractIllager) {
+                AttributeModifier attributeModSpeedBoost = new AttributeModifier("SpeedBoost", mobSpeedModifier, AttributeModifier.Operation.ADDITION);
+                AttributeInstance attributeInst = livingEntity.getAttribute(Attributes.MOVEMENT_SPEED);
+                boolean hasMod = false;
+
+                Set<AttributeModifier> modifierSet = Objects.requireNonNull(attributeInst).getModifiers();
+                for (AttributeModifier aM : modifierSet) {
+                    if (aM.getName().equals("SpeedBoost")) {
+                        if (!Config.mobMovementRework) {
+                            Objects.requireNonNull(attributeInst).removeModifier(aM);
+                        }
+                        hasMod = true;
+                        break;
+                    }
+                }
+
+                if (Config.mobMovementRework && !hasMod) {
+                    Objects.requireNonNull(attributeInst).addTransientModifier(attributeModSpeedBoost);
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40));
+                    //System.out.println(livingEntity.getName()+" Sped up");
+
+                }
+            }
+            if (livingEntity instanceof Player){
+                AttributeModifier attributeModSpeedBoost = new AttributeModifier("SpeedBoost", playerSpeedModifier, AttributeModifier.Operation.ADDITION);
+                AttributeInstance attributeInst = livingEntity.getAttribute(Attributes.MOVEMENT_SPEED);
+                boolean hasMod = false;
+
+                Set<AttributeModifier> modifierSet = Objects.requireNonNull(attributeInst).getModifiers();
+                for (AttributeModifier aM : modifierSet) {
+                    if (aM.getName().equals("SpeedBoost")) {
+                        if (!Config.movementRework) {
+                            Objects.requireNonNull(attributeInst).removeModifier(aM);
+                        }
+                        hasMod = true;
+                        break;
+                    }
+                }
+
+                if (Config.movementRework && !hasMod) {
+                    Objects.requireNonNull(attributeInst).addTransientModifier(attributeModSpeedBoost);
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40));
+                    //System.out.println(livingEntity.getName()+" Sped up");
+
+                }
+            }
+
+    }
 
         @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
         public void onItemUseFinish(LivingEntityUseItemEvent.Finish event) {
@@ -142,7 +185,7 @@ public class Hungerless {
         public void onDamageEvent(LivingHurtEvent event) {
 
             String dmgType = event.getSource().getMsgId();
-            Float dmgAmount = event.getAmount();
+            float dmgAmount = event.getAmount();
             LivingEntity entity = event.getEntity();
 
             boolean check_fall_resist = entity.getActiveEffectsMap().containsKey(ModInit.FALL_RESISTANCE.get());

@@ -8,8 +8,8 @@ import java.util.Properties;
 public class Config {
     protected static final Properties defaultConfig = new Properties();
     public static String fileName;
-    public static boolean movementRework = false;
-    public static boolean mobMovementRework = false;
+    public static boolean movementRework = true;
+    public static boolean mobMovementRework = true;
     public static boolean bonusEffects = true;
     public static boolean bonusEffectsParticles = true;
     public static boolean instantHealing = false;
@@ -30,8 +30,8 @@ public class Config {
             e.printStackTrace();
         }
 
-        movementRework = parseIntConfig(properties.getProperty(Constants.MOVEMENT_REWORK), 0) != 0;
-        mobMovementRework = parseIntConfig(properties.getProperty(Constants.MOB_MOVEMENT_REWORK), 0) != 0;
+        movementRework = parseIntConfig(properties.getProperty(Constants.MOVEMENT_REWORK), 1) != 0;
+        mobMovementRework = parseIntConfig(properties.getProperty(Constants.MOB_MOVEMENT_REWORK), 1) != 0;
         bonusEffects = parseIntConfig(properties.getProperty(Constants.BONUS_EFFECTS), 1) != 0;
         bonusEffectsParticles = parseIntConfig(properties.getProperty(Constants.BONUS_EFFECTS_PARTICLES), 1) != 0;
         instantHealing = parseIntConfig(properties.getProperty(Constants.INSTANT_HEALING), 0) != 0;
@@ -56,7 +56,7 @@ public class Config {
             FileWriter configWriter = new FileWriter(config);
 
             writeBoolean(configWriter, Constants.MOVEMENT_REWORK, movementRework);
-            writeBoolean(configWriter, Constants.MOB_MOVEMENT_REWORK, movementRework);
+            writeBoolean(configWriter, Constants.MOB_MOVEMENT_REWORK, mobMovementRework);
             writeBoolean(configWriter, Constants.BONUS_EFFECTS, bonusEffects);
             writeBoolean(configWriter, Constants.BONUS_EFFECTS_PARTICLES, bonusEffectsParticles);
             writeBoolean(configWriter, Constants.INSTANT_HEALING, instantHealing);
@@ -76,8 +76,8 @@ public class Config {
     }
 
     static {
-        defaultConfig.setProperty(Constants.MOVEMENT_REWORK, "0");
-        defaultConfig.setProperty(Constants.MOB_MOVEMENT_REWORK, "0");
+        defaultConfig.setProperty(Constants.MOVEMENT_REWORK, "1");
+        defaultConfig.setProperty(Constants.MOB_MOVEMENT_REWORK, "1");
         defaultConfig.setProperty(Constants.BONUS_EFFECTS, "1");
         defaultConfig.setProperty(Constants.BONUS_EFFECTS_PARTICLES, "1");
         defaultConfig.setProperty(Constants.INSTANT_HEALING, "0");

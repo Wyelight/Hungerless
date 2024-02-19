@@ -52,7 +52,7 @@ public class ConfigScreen extends Screen {
                 }*/
             }
         };
-        mobMovementReworkWidget = new Checkbox(width / 2 - 100, 27*4, 200, 20, Component.literal("Melee Mob Speed Adjustments"), Config.movementRework) {
+        mobMovementReworkWidget = new Checkbox(width / 2 - 100, 27*4, 200, 20, Component.literal("Melee Mob Speed Adjustments"), Config.mobMovementRework) {
 
             public void renderButton(PoseStack matrices, int mouseX, int mouseY, float delta) {
                 super.renderWidget(matrices, mouseX, mouseY, delta);
