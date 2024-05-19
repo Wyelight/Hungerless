@@ -1,9 +1,12 @@
 package wyelight.hungerless.config;
 
+import net.minecraft.client.Minecraft;
 import wyelight.hungerless.Constants;
 
 import java.io.*;
 import java.util.Properties;
+
+import static wyelight.hungerless.Hungerless.EventListener.UpdateMovement;
 
 public class Config {
     protected static final Properties defaultConfig = new Properties();
@@ -61,6 +64,9 @@ public class Config {
             writeBoolean(configWriter, Constants.BONUS_EFFECTS_PARTICLES, bonusEffectsParticles);
             writeBoolean(configWriter, Constants.INSTANT_HEALING, instantHealing);
             configWriter.close();
+            if (Minecraft.getInstance().level != null) {
+                UpdateMovement();
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
