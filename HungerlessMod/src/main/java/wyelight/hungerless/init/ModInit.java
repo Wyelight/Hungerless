@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -29,7 +28,7 @@ public class ModInit {
     public static final DeferredRegister<Item> VANILLA_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "minecraft");
     public static final DeferredRegister<Block> VANILLA_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, "minecraft");
 
-    public static final RegistryObject<Block> NEW_CAKE = VANILLA_BLOCKS.register("cake",() -> new ModCakeBlock(BlockBehaviour.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL)));
+    public static final RegistryObject<Block> NEW_CAKE = VANILLA_BLOCKS.register("cake",() -> new ModCakeBlock(BlockBehaviour.Properties.copy(Blocks.CAKE).strength(0.5F).sound(SoundType.WOOL)));
 
     //public static final RegistryObject<Item> NEW_CAKE_ITEM = VANILLA_ITEMS.register("cake", () -> ForgeRegistries.ITEMS.getValue(new ResourceLocation("cake")));
 

@@ -17,12 +17,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,12 +39,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.command.ConfigCommand;
 import org.apache.logging.log4j.LogManager;
 import wyelight.hungerless.commands.PlayerSpeedwalkToggleCommand;
-//import wyelight.hungerless.config.Config;
-//import wyelight.hungerless.config.ConfigScreen;
 import wyelight.hungerless.config.ConfigServer;
 import wyelight.hungerless.init.ModInit;
 
-import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -124,21 +119,21 @@ public class Hungerless {
         @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
         public void onJoin(EntityJoinLevelEvent event) {
             if (event.getEntity() instanceof LivingEntity livingEntity){
-                //UpdateSpeed(livingEntity);
+                UpdateSpeed(livingEntity);
             }
         }
         @SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = true)
         public void onMobSpawn(MobSpawnEvent.FinalizeSpawn event) {
-            //UpdateSpeed(event.getEntity());
+            UpdateSpeed(event.getEntity());
         }
 
         @SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = true)
         public void onLivingJump(LivingEvent.LivingJumpEvent event) {
-            //UpdateSpeed(event.getEntity());
+            UpdateSpeed(event.getEntity());
         }
         @SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = true)
         public void onLivingFall(LivingFallEvent event) {
-            //UpdateSpeed(event.getEntity());
+            UpdateSpeed(event.getEntity());
         }
 
         public static void UpdateSpeed(LivingEntity livingEntity) {
@@ -162,8 +157,8 @@ public class Hungerless {
 
                 if (ConfigServer.MOB_MOVEMENT_REWORK.get() && !hasMod) {
                     Objects.requireNonNull(attributeInst).addTransientModifier(attributeModSpeedBoost);
-                    livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40));
-                    System.out.print("Confirm Entity Glow " + livingEntity);
+                    //livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40));
+                    //System.out.print("Confirm Entity Glow " + livingEntity);
                     //System.out.println(livingEntity.getName()+" Sped up");
 
                 }
@@ -186,8 +181,6 @@ public class Hungerless {
 
                 if (ConfigServer.MOVEMENT_REWORK.get() && !hasMod) {
                     Objects.requireNonNull(attributeInst).addTransientModifier(attributeModSpeedBoost);
-                    //livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40));
-                    //System.out.println(livingEntity.getName()+" Sped up");
 
                 }
             }
@@ -277,23 +270,13 @@ public class Hungerless {
                     //entity.sendSystemMessage(Component.literal("Resisted Magic"));
                 }
             }
-            //if (event.getEntity() instanceof Player player) {
-                //identifies damage type
-                //player.sendSystemMessage(Component.literal(dmgType+" damage!"));
-            //}
         }
 
         @OnlyIn(Dist.CLIENT)
         public static void UpdateMovement(){
 
-            AABB boundingBox = new AABB(
-                    Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY,
-                    Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY
-            );
-            //Predicate<Entity> alwaysTruePredicate = entity -> true;
             Player player = Objects.requireNonNull(Minecraft.getInstance().player);
-            Vec3 vec3 = player.getViewVector(1.0F);
-            List<Entity> entityList = player.level.getEntities(player,player.getBoundingBox().inflate(1000000D), EntitySelector.ENTITY_STILL_ALIVE);
+            List<Entity> entityList = player.level().getEntities(player,player.getBoundingBox().inflate(1000000D), EntitySelector.ENTITY_STILL_ALIVE);
             for (Entity e: entityList){
                 if (e instanceof LivingEntity livingEntity){
                     UpdateSpeed(livingEntity);
@@ -301,9 +284,7 @@ public class Hungerless {
             }
             System.out.print("Getting entity list");
             System.out.print(entityList);
-            //System.out.print(entityList.toString());
         }
-
 
         public static void FoodHealing(Player player, Item item) {
 
