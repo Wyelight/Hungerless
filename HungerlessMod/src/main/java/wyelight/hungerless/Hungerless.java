@@ -124,21 +124,21 @@ public class Hungerless {
         @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
         public void onJoin(EntityJoinLevelEvent event) {
             if (event.getEntity() instanceof LivingEntity livingEntity){
-                //UpdateSpeed(livingEntity);
+                UpdateSpeed(livingEntity);
             }
         }
         @SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = true)
         public void onMobSpawn(MobSpawnEvent.FinalizeSpawn event) {
-            //UpdateSpeed(event.getEntity());
+            UpdateSpeed(event.getEntity());
         }
 
         @SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = true)
         public void onLivingJump(LivingEvent.LivingJumpEvent event) {
-            //UpdateSpeed(event.getEntity());
+            UpdateSpeed(event.getEntity());
         }
         @SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = true)
         public void onLivingFall(LivingFallEvent event) {
-            //UpdateSpeed(event.getEntity());
+            UpdateSpeed(event.getEntity());
         }
 
         public static void UpdateSpeed(LivingEntity livingEntity) {
@@ -162,8 +162,8 @@ public class Hungerless {
 
                 if (ConfigServer.MOB_MOVEMENT_REWORK.get() && !hasMod) {
                     Objects.requireNonNull(attributeInst).addTransientModifier(attributeModSpeedBoost);
-                    livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40));
-                    System.out.print("Confirm Entity Glow " + livingEntity);
+                    //livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40));
+                    //System.out.print("Confirm Entity Glow " + livingEntity);
                     //System.out.println(livingEntity.getName()+" Sped up");
 
                 }
