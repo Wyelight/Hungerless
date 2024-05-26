@@ -291,9 +291,7 @@ public class Hungerless {
 
             boolean show_particles = ConfigServer.BONUS_EFFECTS_PARTICLES.get();
             float nutrition = Objects.requireNonNull(item.getFoodProperties()).getNutrition();
-            if (item == Items.ROTTEN_FLESH) {
-                player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 400, 0));
-            }
+
             // Bonus Effects
             if (ConfigServer.BONUS_EFFECTS.get()) {
                 if (item == Items.BAKED_POTATO) {
@@ -344,6 +342,10 @@ public class Hungerless {
                     player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 1));
                 } else if (item == Items.MUTTON) {
                     player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 0));
+                } else if (item == Items.RABBIT) {
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1));
+                } else if (item == Items.ROTTEN_FLESH) {
+                    player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 400, 1));
                 }
             }
             if (item == Items.PORKCHOP) {
@@ -354,6 +356,9 @@ public class Hungerless {
             }
             else if (item == Items.MUTTON) {
                 player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200, 0));
+            }
+            else if (item == Items.ROTTEN_FLESH) {
+                player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 400, 0));
             }
 
             if (ConfigServer.INSTANT_HEALING.get()) {
